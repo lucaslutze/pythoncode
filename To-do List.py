@@ -1,34 +1,37 @@
 import os
 
-folderPath = "C:/Users/LucasLutze/PycharmProjects/pythonProject1"
+folderPath = "C:/Users/LucasLutze/PycharmProjects/pythonProject1" # User chooses file path
 files = os.listdir(folderPath)
 txtFiles = [f for f in files if f.endswith('.txt')]
 
-print("Welcome to your to-do list! Select existing to-do list below or create a new one:")
+print("Welcome to your to-do list! Select an existing to-do list below or create a new one:")
 
-for txtFiles in txtFiles:
-    print(txtFiles)
+for txtFile in txtFiles:
+    print(txtFile)
 
 fileName = input("Please enter the name of the file you want to edit or create: ")
 filePath = os.path.join(folderPath, fileName)
 
-fileCreate = ""
-
 if os.path.exists(filePath):
+    file = open(filePath, "r")
+    tasks = file.read()
+    print("Your current to-do list:")
+    print(tasks)
+    file.close()
     file = open(filePath, "a")
 else:
-    open(fileName, "a").close
+    createFile = input("The list could not be located. Would you like to create one? (yes/no) ").lower()
+    if createFile == "yes":
+        file = open(filePath, "w")
+    else:
+        print("Okay, try to search for your file again")
+        quit()
 
-if fileCreate == "yes":
-    file.write(input("Please enter your tasks here: "))
+while True:
+    task = input("Please enter your task or type 'exit' to exit: ")
+    if task.lower() == "exit":
+        break
+    file.write(task + "\n")
+    print("Task added to the file.")
 
-else:
-    fileCreate = input("The list could not be located. Would you like to create one? (yes/no) ").lower()
-
-if fileCreate == "yes":
-    print("Please enter your tasks: ")
-    file = open(filePath, "w")
-elif fileCreate == "no":
-    print("Okay, try to search for your file again")
-else:
-    print("Unable to understand prompt! ")
+file.close()
